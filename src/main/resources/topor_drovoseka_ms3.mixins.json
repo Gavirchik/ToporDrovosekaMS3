@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "com.gavirchik.topordrovoseka.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "topor_drovoseka_ms3.refmap.json",
+  "mixins": [
+    "DispenserMixin"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

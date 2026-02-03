@@ -1,0 +1,24 @@
+# Gradle
+.gradle/
+build/
+out/
+bin/
+
+# Minecraft
+run/
+eclipse/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+*.swp
+*.swo
+
+# Local files
+local.properties
+gradle.properties

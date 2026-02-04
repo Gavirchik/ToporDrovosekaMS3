@@ -20,8 +20,8 @@ public class ModConfig {
         MIN_AXE_DURABILITY = builder
                 .comment("Minimum durability of a golden axe for crafting",
                         "0 = any",
-                        "32 = only a new")
-                .defineInRange("minAxeDurability", 32, 0, 32);
+                        "31 = only a new")
+                .defineInRange("minAxeDurability", 31, 0, 31);
 
         builder.pop();
         SPEC = builder.build();

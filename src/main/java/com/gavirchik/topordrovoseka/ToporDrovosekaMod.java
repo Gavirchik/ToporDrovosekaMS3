@@ -7,9 +7,7 @@ import net.minecraftforge.fml.config.ModConfig.Type;
 
 @Mod("topor_drovoseka_ms3")
 public class ToporDrovosekaMod {
-
     public ToporDrovosekaMod() {
-        // Configuration registration
         ModLoadingContext.get().registerConfig(Type.COMMON, ModConfig.SPEC);
     }
 }

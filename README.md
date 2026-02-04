@@ -8,7 +8,7 @@ Minecraft Forge 1.20.1 mod that adds the ritual of creating a unique axe through
 - Requires a fully repaired golden axe (100% durability)
 - Result: "Lumberjack's Axe" with unbreakable property
 - Minimalistic code with no unnecessary dependencies
-- Configurable via config file (enable/disable mod)
+- Configurable via config file: enable/disable mod; minimal durability axe
 
 ## Video Just_S
 

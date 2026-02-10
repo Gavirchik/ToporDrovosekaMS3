@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/gavirchik/ToporDrovosekaMS3"
 
 [[mods]]
 modId="topor_drovoseka_ms3"
-version="1.0.1"
+version="1.0.2"
 displayName="Topor Drovoseka MS3"
 description='''
 Adds the ritual of creating a unique axe through dispenser, as Just_S player did on the MineShield 3 server.

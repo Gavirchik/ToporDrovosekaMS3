@@ -1,25 +1,47 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
-
-# idea
-out
+# Minecraft/MinecraftForge specific
+run/
+out/
+logs/
+*.log
 *.ipr
 *.iws
 *.iml
-.idea
+*.class
+*.jar
+build/
+.classpath
+.project
+.settings/
+bin/
 
-# gradle
-build
-.gradle
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
 
-# other
-eclipse
-run
+# Eclipse
+*.launch
+.idea/
+*.tmp
+*.temp
+*.cache
+*.lock
+*.part
+*.crc
 
-# Files from Forge MDK
-forge*changelog.txt
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# GitHub
+*.patch
+*.diff
+*.orig
+*.rej
+
+# Mod specific
+crash-reports/
+screenshots/
+debug.log

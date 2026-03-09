@@ -1,0 +1,37 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT License"
+
+[[mods]]
+modId="topordrovosekams3"
+version="1.0.0"
+displayName="Topor Drovoseka MS3"
+logoFile="logo.png"
+credits="Created by gavirchik"
+author="gavirchik"
+description='''
+A mod that adds a special recipe for crafting a Lumberjack Axe through a dispenser as Just_S player did on the MineShield 3 server.
+
+Arrangement of items in the dispenser (top view):
+
+ [ Empty ] [Netherite Block] [Netherite Block]
+ [Enchanted Book (Unbreaking III)] [Golden Axe] [Netherite Block]
+ [Nether Star] [Enchanted Book (Mending)] [ Empty ]
+
+When activated by the redstone signal, if the items are placed correctly,
+the dispenser will clear itself and throw out a special golden axe with a unique name.
+'''
+
+[[dependencies.topordrovosekams3]]
+modId="forge"
+mandatory=true
+versionRange="[47,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.topordrovosekams3]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1]"
+ordering="NONE"
+side="BOTH"

@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.gavirchik.topordrovosekams3.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "topordrovosekams3.refmap.json",
+  "mixins": [
+    "DispenserMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

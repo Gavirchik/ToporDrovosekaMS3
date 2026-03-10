@@ -5,18 +5,18 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class ModConfig {
     public static class Common {
-        // Основные настройки
+        // Basic settings
         public final ForgeConfigSpec.BooleanValue enableMod;
         public final ForgeConfigSpec.IntValue minAxeDurability;
 
-        // Настройки проверки NBT тегов (только основные)
-        public final ForgeConfigSpec.BooleanValue requireNoEnchantments;   // Enchantments - чары
-        public final ForgeConfigSpec.BooleanValue requireNoCustomName;     // display.Name - кастомное имя
-        public final ForgeConfigSpec.BooleanValue requireNoLore;           // display.Lore - описание
-        public final ForgeConfigSpec.BooleanValue requireNoUnbreakable;    // Unbreakable - неломаемый
-        public final ForgeConfigSpec.BooleanValue requireNoCanDestroy;     // CanDestroy - может разрушать
-        public final ForgeConfigSpec.BooleanValue requireNoCanPlaceOn;     // CanPlaceOn - может ставить на
-        public final ForgeConfigSpec.BooleanValue requireNoOtherTags;      // Любые другие теги
+        // NBT Tag Verification settings (basic only)
+        public final ForgeConfigSpec.BooleanValue requireNoEnchantments;   // Enchantments
+        public final ForgeConfigSpec.BooleanValue requireNoCustomName;     // display.Name
+        public final ForgeConfigSpec.BooleanValue requireNoLore;           // display.Lore
+        public final ForgeConfigSpec.BooleanValue requireNoUnbreakable;    // Unbreakable
+        public final ForgeConfigSpec.BooleanValue requireNoCanDestroy;     // CanDestroy
+        public final ForgeConfigSpec.BooleanValue requireNoCanPlaceOn;     // CanPlaceOn
+        public final ForgeConfigSpec.BooleanValue requireNoOtherTags;      // Any Other Tags
 
         public Common(ForgeConfigSpec.Builder builder) {
             builder.comment("General settings")

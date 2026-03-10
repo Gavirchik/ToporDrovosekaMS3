@@ -26,20 +26,18 @@ public class DispenserMixin {
             ItemStack resultAxe = RecipeHelper.checkRecipe(dispenser);
 
             if (!resultAxe.isEmpty()) {
-                // Очищаем все слоты
+                // Clearing all slots
                 for (int i = 0; i < dispenser.getContainerSize(); i++) {
                     dispenser.setItem(i, ItemStack.EMPTY);
                 }
                 dispenser.setChanged();
 
-                // Получаем направление раздатчика
+                // We get the dispenser's direction
                 Direction direction = level.getBlockState(pos).getValue(BlockStateProperties.FACING);
 
-                // Ставим топор в слот, откуда раздатчик сам его выбросит
+                // We put the axe in the slot, from where the dispenser will throw it away.
                 dispenser.setItem(0, resultAxe);
 
-                // Не отменяем событие - пусть раздатчик сам выбросит предмет
-                // ci.cancel(); // НЕ ОТМЕНЯЕМ!
             }
         }
     }

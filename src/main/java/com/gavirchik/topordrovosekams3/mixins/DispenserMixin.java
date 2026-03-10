@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,39 +35,11 @@ public class DispenserMixin {
                 // Получаем направление раздатчика
                 Direction direction = level.getBlockState(pos).getValue(BlockStateProperties.FACING);
 
-                // Позиция для выбрасывания предмета
-                double x = pos.getX() + 0.5 + direction.getStepX() * 0.6;
-                double y = pos.getY() + 0.5 + direction.getStepY() * 0.6;
-                double z = pos.getZ() + 0.5 + direction.getStepZ() * 0.6;
+                // Ставим топор в слот, откуда раздатчик сам его выбросит
+                dispenser.setItem(0, resultAxe);
 
-                // Создаем предмет
-                net.minecraft.world.entity.item.ItemEntity itemEntity =
-                        new net.minecraft.world.entity.item.ItemEntity(
-                                level,
-                                x,
-                                y,
-                                z,
-                                resultAxe
-                        );
-
-                // Скорость выброса
-                double speed = 0.2;
-                double randomSpread = level.random.nextDouble() * 0.1 - 0.05;
-
-                itemEntity.setDeltaMovement(
-                        direction.getStepX() * speed + (direction.getStepY() == 0 ? randomSpread : 0),
-                        direction.getStepY() * speed + (direction.getStepY() >= 0 ? 0.2 : 0),
-                        direction.getStepZ() * speed + (direction.getStepY() == 0 ? randomSpread : 0)
-                );
-
-                itemEntity.setDefaultPickUpDelay();
-                level.addFreshEntity(itemEntity);
-
-                // Стандартные звуки и эффекты раздатчика
-                level.levelEvent(1000, pos, 0);
-                level.levelEvent(2000, pos, direction.get3DDataValue());
-
-                ci.cancel();
+                // Не отменяем событие - пусть раздатчик сам выбросит предмет
+                // ci.cancel(); // НЕ ОТМЕНЯЕМ!
             }
         }
     }

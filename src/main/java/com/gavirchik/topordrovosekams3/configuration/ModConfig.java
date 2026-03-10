@@ -7,16 +7,16 @@ public class ModConfig {
     public static class Common {
         // Basic settings
         public final ForgeConfigSpec.BooleanValue enableMod;
-        public final ForgeConfigSpec.IntValue minAxeDurability;
+        public final ForgeConfigSpec.IntValue minAxeDurability; // Backward compatibility value
 
-        // NBT Tag Verification settings (basic only)
-        public final ForgeConfigSpec.BooleanValue requireNoEnchantments;   // Enchantments
-        public final ForgeConfigSpec.BooleanValue requireNoCustomName;     // display.Name
-        public final ForgeConfigSpec.BooleanValue requireNoLore;           // display.Lore
-        public final ForgeConfigSpec.BooleanValue requireNoUnbreakable;    // Unbreakable
-        public final ForgeConfigSpec.BooleanValue requireNoCanDestroy;     // CanDestroy
-        public final ForgeConfigSpec.BooleanValue requireNoCanPlaceOn;     // CanPlaceOn
-        public final ForgeConfigSpec.BooleanValue requireNoOtherTags;      // Any Other Tags
+        // NBT Tag Verification Settings
+        public final ForgeConfigSpec.BooleanValue requireNoEnchantments;
+        public final ForgeConfigSpec.BooleanValue requireNoCustomName;
+        public final ForgeConfigSpec.BooleanValue requireNoLore;
+        public final ForgeConfigSpec.BooleanValue requireNoUnbreakable;
+        public final ForgeConfigSpec.BooleanValue requireNoCanDestroy;
+        public final ForgeConfigSpec.BooleanValue requireNoCanPlaceOn;
+        public final ForgeConfigSpec.BooleanValue requireNoOtherTags;
 
         public Common(ForgeConfigSpec.Builder builder) {
             builder.comment("General settings")
@@ -27,14 +27,14 @@ public class ModConfig {
                     .define("enableMod", true);
 
             minAxeDurability = builder
-                    .comment("Minimum axe durability required (0-31)",
-                            "0 = any golden axe, even broken",
-                            "31 = only brand new axe (full durability)")
-                    .defineInRange("minAxeDurability", 31, 0, 31);
+                    .comment("Minimum axe durability required (reserved for future use)",
+                            "Note: Currently only axes with Damage=0 (brand new) are accepted",
+                            "This setting is kept for backward compatibility")
+                    .defineInRange("minAxeDurability", 32, 0, 32);
 
             builder.pop();
 
-            builder.comment("NBT Tags Check Settings (Basic tags only)",
+            builder.comment("NBT Tags Check Settings",
                             "Configure which NBT tags are allowed/prohibited on the golden axe",
                             "True = axe must NOT have this tag",
                             "False = axe can have this tag")

@@ -16,7 +16,7 @@ public class RecipeHelper {
     private static final Map<Integer, ItemStack> RECIPE = new HashMap<>();
 
     static {
-        // Рецепт 3x3
+        // Recipe 3x3
         // 0 1 2
         // 3 4 5
         // 6 7 8
@@ -26,7 +26,7 @@ public class RecipeHelper {
         RECIPE.put(2, new ItemStack(Items.NETHERITE_BLOCK));
 
         RECIPE.put(3, createEnchantedBook(Enchantments.UNBREAKING, 3));
-        // Слот 4: проверяется отдельно (золотой топор)
+        // Slot 4: checking separately (golden axe)
         RECIPE.put(5, new ItemStack(Items.NETHERITE_BLOCK));
 
         RECIPE.put(6, new ItemStack(Items.NETHER_STAR));
@@ -38,10 +38,10 @@ public class RecipeHelper {
         if (!ModConfig.COMMON.enableMod.get()) return ItemStack.EMPTY;
         if (container.getContainerSize() != 9) return ItemStack.EMPTY;
 
-        // Проверяем все слоты кроме 4 (топор)
+        // We check all slots except 4 (axe)
         for (Map.Entry<Integer, ItemStack> entry : RECIPE.entrySet()) {
             int slot = entry.getKey();
-            if (slot == 4) continue; // Топор проверяем отдельно
+            if (slot == 4) continue; // We check the axe separately
 
             ItemStack required = entry.getValue();
             ItemStack actual = container.getItem(slot);
@@ -57,56 +57,50 @@ public class RecipeHelper {
             }
         }
 
-        // Проверяем топор в слоте 4
+        // Checking the axe in slot 4
         ItemStack axe = container.getItem(4);
 
-        // 1. Должен быть золотой топор
+        // 1. There must be a golden axe
         if (!axe.is(Items.GOLDEN_AXE)) return ItemStack.EMPTY;
 
-        // 2. Проверка минимальной прочности из конфига
-        if (!isAxeDurabilityValid(axe)) return ItemStack.EMPTY;
+        // 2. 'Damage' check - ONLY 0 (new axe)
+        if (!isAxeBrandNew(axe)) return ItemStack.EMPTY;
 
-        // 3. Проверка NBT тегов согласно конфигурации
+        // 3. Checking NBT tags according to configuration
         if (!isNbtAllowed(axe)) return ItemStack.EMPTY;
 
-        // Все проверки пройдены - создаем новый топор
+        // All checks have been passed - we are creating a new axe
         return createLumberjackAxe();
     }
 
-    private static boolean isAxeDurabilityValid(ItemStack axe) {
-        int minDurability = ModConfig.COMMON.minAxeDurability.get();
-
-        // Если прочность 0, принимаем любой топор (даже сломанный)
-        if (minDurability == 0) return true;
-
-        // Вычисляем текущую прочность
-        int maxDurability = axe.getMaxDamage(); // Для золотого топора = 32
+    private static boolean isAxeBrandNew(ItemStack axe) {
+        // We get the value of 'Damage' (how many damage units)
         int currentDamage = axe.getDamageValue();
-        int currentDurability = maxDurability - currentDamage;
 
-        ToporDrovosekaMS3.LOGGER.debug("Axe durability: {}/{} (min required: {})",
-                currentDurability, maxDurability, minDurability);
+        // Maximum durabulity of the golden axe
+        int maxDurability = axe.getMaxDamage(); // = 32
 
-        return currentDurability >= minDurability;
+        ToporDrovosekaMS3.LOGGER.debug("Axe - Damage: {}, Remaining: {}/{}",
+                currentDamage, maxDurability - currentDamage, maxDurability);
+
+        // ONLY new axes with 'Damage = 0'
+        return currentDamage == 0;
     }
 
     private static boolean isNbtAllowed(ItemStack stack) {
         CompoundTag tag = stack.getTag();
-        if (tag == null || tag.isEmpty()) {
-            return true; // Нет NBT тегов - всегда разрешено
-        }
 
-        // Создаем копию для проверки
+        // Creating a copy for verification
         CompoundTag tagCopy = tag.copy();
 
-        // Проверяем Enchantments
+        // Checking the 'Enchantments'
         if (ModConfig.COMMON.requireNoEnchantments.get() && tagCopy.contains("Enchantments")) {
             ToporDrovosekaMS3.LOGGER.debug("Axe has Enchantments tag");
             return false;
         }
         tagCopy.remove("Enchantments");
 
-        // Проверяем display тег (имя, описание)
+        // Checking the 'display' tag (name, description)
         if (tagCopy.contains("display")) {
             CompoundTag display = tagCopy.getCompound("display");
 
@@ -120,37 +114,37 @@ public class RecipeHelper {
                 return false;
             }
 
-            // Если display пустой после проверок, удаляем его
+            // If the 'display' is empty after checking, delete it.
             if (display.isEmpty()) {
                 tagCopy.remove("display");
             }
         }
 
-        // Проверяем Unbreakable
+        // Checking the 'Unbreakable'
         if (ModConfig.COMMON.requireNoUnbreakable.get() && tagCopy.contains("Unbreakable")) {
             ToporDrovosekaMS3.LOGGER.debug("Axe has Unbreakable");
             return false;
         }
         tagCopy.remove("Unbreakable");
 
-        // Проверяем CanDestroy
+        // Checking the 'CanDestroy'
         if (ModConfig.COMMON.requireNoCanDestroy.get() && tagCopy.contains("CanDestroy")) {
             ToporDrovosekaMS3.LOGGER.debug("Axe has CanDestroy");
             return false;
         }
         tagCopy.remove("CanDestroy");
 
-        // Проверяем CanPlaceOn
+        // Cheсking the 'CanPlaceOn'
         if (ModConfig.COMMON.requireNoCanPlaceOn.get() && tagCopy.contains("CanPlaceOn")) {
             ToporDrovosekaMS3.LOGGER.debug("Axe has CanPlaceOn");
             return false;
         }
         tagCopy.remove("CanPlaceOn");
 
-        // Damage всегда присутствует на инструментах, поэтому не проверяем его как "другой тег"
+        // 'Damage' is always present on the instruments, but we have already checked that it is '= 0'
         tagCopy.remove("Damage");
 
-        // Проверка остальных тегов, если включена опция
+        // Checking the remaining tags if the option is enabled
         if (ModConfig.COMMON.requireNoOtherTags.get() && !tagCopy.isEmpty()) {
             ToporDrovosekaMS3.LOGGER.debug("Axe has unknown NBT tags: {}", tagCopy.getAllKeys());
             return false;

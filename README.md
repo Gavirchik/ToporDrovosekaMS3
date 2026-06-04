@@ -1,4 +1,4 @@
-# ToporDrovosekasMS3
+# ToporDrovosekaMS3
 
 ![Logo](src/main/resources/logo.png)
 
@@ -30,7 +30,7 @@ A golden axe named **"Топор Дровосека"** — bold orange text, unb
 
 ## Configuration
 
-File: `config/topordrovosekasms3-common.toml`
+File: `config/topordrovosekams3-common.toml`
 
 **[general]**
 - `enableMod` — enable/disable the mod (default: `true`)

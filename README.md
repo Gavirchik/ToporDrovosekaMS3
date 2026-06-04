@@ -1,53 +1,53 @@
 # ToporDrovosekasMS3
 
-Мод для Minecraft 1.21.1 (NeoForge), воссоздающий ритуал создания **Топора Дровосека** — особого золотого топора, который появился на сервере MineShield 3.
+A Minecraft 1.21.1 (NeoForge) mod that recreates the ritual of crafting the **Woodcutter's Axe** — a special golden axe that originated on the MineShield 3 server.
 
-## Как работает
+## How It Works
 
-Поместите предметы в раздатчик строго по схеме и подайте сигнал редстоуна. Раздатчик поглотит все ингредиенты и выбросит готовый топор.
+Place the ingredients in a dispenser according to the layout below and send a redstone signal. The dispenser will consume all ingredients and eject the finished axe.
 
-### Схема раздатчика (3×3)
+### Dispenser Layout (3×3)
 
 ```
-[ пусто ] [ незерит ] [ незерит ]
-[  Кн.П  ] [ зол.топор] [ незерит ]
-[ зв.незера] [  Кн.М  ] [ пусто  ]
+[  empty  ] [ netherite ] [ netherite ]
+[  Book U ] [ golden axe] [ netherite ]
+[nether star] [  Book M  ] [  empty   ]
 ```
 
-| Обозначение | Предмет |
-|-------------|---------|
-| незерит | Блок незерита |
-| Кн.П | Зачарованная книга — Прочность III |
-| зол.топор | Золотой топор (чистый, без модификаций) |
-| зв.незера | Звезда незера |
-| Кн.М | Зачарованная книга — Починка I |
+| Symbol | Item |
+|--------|------|
+| netherite | Block of Netherite |
+| Book U | Enchanted Book — Unbreaking III |
+| golden axe | Golden Axe (clean, unmodified) |
+| nether star | Nether Star |
+| Book M | Enchanted Book — Mending I |
 
-### Результат
+### Result
 
-Золотой топор **«Топор Дровосека»** — жирный оранжевый текст, нельзя сломать.
+A golden axe named **"Топор Дровосека"** — bold orange text, unbreakable.
 
-## Конфигурация
+## Configuration
 
-Файл: `config/topordrovosekasms3-common.toml`
+File: `config/topordrovosekasms3-common.toml`
 
 **[general]**
-- `enableMod` — включить/выключить мод (по умолчанию: `true`)
-- `minAxeDurability` — минимальная прочность топора в рецепте, 0–31 (по умолчанию: `31` — только новый топор)
+- `enableMod` — enable/disable the mod (default: `true`)
+- `minAxeDurability` — minimum remaining durability of the axe in the recipe, 0–31 (default: `31` — brand new axe only)
 
-**[nbt_checks]** — контроль тегов золотого топора в рецепте (по умолчанию все `true`):
-- `requireNoEnchantments` — без чар
-- `requireNoCustomName` — без кастомного имени
-- `requireNoLore` — без описания (lore)
-- `requireNoUnbreakable` — без тега Unbreakable
-- `requireNoCanDestroy` — без тега CanDestroy
-- `requireNoCanPlaceOn` — без тега CanPlaceOn
-- `requireNoOtherTags` — без прочих кастомных тегов
+**[nbt_checks]** — controls which tags are forbidden on the golden axe in the recipe (all default to `true`):
+- `requireNoEnchantments` — no enchantments
+- `requireNoCustomName` — no custom name
+- `requireNoLore` — no lore text
+- `requireNoUnbreakable` — no Unbreakable tag
+- `requireNoCanDestroy` — no CanDestroy tag
+- `requireNoCanPlaceOn` — no CanPlaceOn tag
+- `requireNoOtherTags` — no other custom tags
 
-## Установка
+## Installation
 
-1. Установите [NeoForge 21.1.x](https://neoforged.net/) для Minecraft 1.21.1
-2. Поместите JAR из `build/libs/` в папку `mods/`
+1. Install [NeoForge 21.1.x](https://neoforged.net/) for Minecraft 1.21.1
+2. Drop the JAR from `build/libs/` into your `mods/` folder
 
-## Лицензия
+## License
 
 [MIT](LICENSE) © 2026 Gavirchik

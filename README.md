@@ -1,5 +1,7 @@
 # ToporDrovosekasMS3
 
+![Logo](src/main/resources/logo.png)
+
 A Minecraft 1.21.1 (NeoForge) mod that recreates the ritual of crafting the **Woodcutter's Axe** — a special golden axe that originated on the MineShield 3 server.
 
 ## How It Works

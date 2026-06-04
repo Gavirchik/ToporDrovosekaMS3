@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.gavirchik.topordrovosekasms3.mixin",
+  "package": "com.gavirchik.topordrovosekams3.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "DispenserBlockMixin"

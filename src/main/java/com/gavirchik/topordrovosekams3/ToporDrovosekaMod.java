@@ -1,4 +1,4 @@
-package com.gavirchik.topordrovosekasms3;
+package com.gavirchik.topordrovosekams3;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -15,13 +15,13 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
-@Mod(TopordrovosekasMod.MODID)
-public class TopordrovosekasMod {
+@Mod(ToporDrovosekaMod.MODID)
+public class ToporDrovosekaMod {
 
-    public static final String MODID = "topordrovosekasms3";
+    public static final String MODID = "topordrovosekams3";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public TopordrovosekasMod(IEventBus modEventBus, ModContainer modContainer) {
+    public ToporDrovosekaMod(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
 
         NeoForge.EVENT_BUS.register(this);

@@ -1,57 +1,110 @@
 package com.gavirchik.topordrovosekasms3;
 
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Neo's config APIs
 @EventBusSubscriber(modid = TopordrovosekasMod.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class Config {
+
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
-    private static final ModConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER.comment("Whether to log the dirt block on common setup").define("logDirtBlock", true);
+    // [general]
+    private static final ModConfigSpec.BooleanValue ENABLE_MOD;
+    private static final ModConfigSpec.IntValue MIN_AXE_DURABILITY;
 
-    private static final ModConfigSpec.IntValue MAGIC_NUMBER = BUILDER.comment("A magic number").defineInRange("magicNumber", 42, 0, Integer.MAX_VALUE);
+    // [nbt_checks]
+    private static final ModConfigSpec.BooleanValue REQUIRE_NO_ENCHANTMENTS;
+    private static final ModConfigSpec.BooleanValue REQUIRE_NO_CUSTOM_NAME;
+    private static final ModConfigSpec.BooleanValue REQUIRE_NO_LORE;
+    private static final ModConfigSpec.BooleanValue REQUIRE_NO_UNBREAKABLE;
+    private static final ModConfigSpec.BooleanValue REQUIRE_NO_CAN_DESTROY;
+    private static final ModConfigSpec.BooleanValue REQUIRE_NO_CAN_PLACE_ON;
+    private static final ModConfigSpec.BooleanValue REQUIRE_NO_OTHER_TAGS;
 
-    public static final ModConfigSpec.ConfigValue<String> MAGIC_NUMBER_INTRODUCTION = BUILDER.comment("What you want the introduction message to be for the magic number").define("magicNumberIntroduction", "The magic number is... ");
+    static final ModConfigSpec SPEC;
 
-    // a list of strings that are treated as resource locations for items
-    private static final ModConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER.comment("A list of items to log on common setup.").defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
+    static {
+        BUILDER.comment("General settings").push("general");
 
-    private static final ModConfigSpec.BooleanValue REQUIRE_CLEAN_AXE = BUILDER
-            .comment("If true, the Golden Axe placed in the dispenser recipe must have no modifications (no enchantments, custom name, etc.). Set to false to allow any Golden Axe.")
-            .define("requireCleanAxe", true);
+        ENABLE_MOD = BUILDER
+                .comment("Enable/disable the mod")
+                .define("enableMod", true);
 
-    static final ModConfigSpec SPEC = BUILDER.build();
+        MIN_AXE_DURABILITY = BUILDER
+                .comment(
+                        "Minimum axe durability required (0-31)",
+                        "0 = any golden axe, even broken",
+                        "31 = only brand new axe (full durability)"
+                )
+                .defineInRange("minAxeDurability", 31, 0, 31);
 
-    public static boolean logDirtBlock;
-    public static int magicNumber;
-    public static String magicNumberIntroduction;
-    public static Set<Item> items;
-    public static boolean requireCleanAxe;
+        BUILDER.pop();
 
-    private static boolean validateItemName(final Object obj) {
-        return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));
+        BUILDER.comment(
+                "NBT Tags Check Settings (Basic tags only)",
+                "Configure which NBT tags are allowed/prohibited on the golden axe",
+                "True = axe must NOT have this tag",
+                "False = axe can have this tag"
+        ).push("nbt_checks");
+
+        REQUIRE_NO_ENCHANTMENTS = BUILDER
+                .comment("Require no enchantments (Enchantments tag)")
+                .define("requireNoEnchantments", true);
+
+        REQUIRE_NO_CUSTOM_NAME = BUILDER
+                .comment("Require no custom name (display.Name tag)")
+                .define("requireNoCustomName", true);
+
+        REQUIRE_NO_LORE = BUILDER
+                .comment("Require no lore text (display.Lore tag)")
+                .define("requireNoLore", true);
+
+        REQUIRE_NO_UNBREAKABLE = BUILDER
+                .comment("Require no Unbreakable tag")
+                .define("requireNoUnbreakable", true);
+
+        REQUIRE_NO_CAN_DESTROY = BUILDER
+                .comment("Require no CanDestroy tag")
+                .define("requireNoCanDestroy", true);
+
+        REQUIRE_NO_CAN_PLACE_ON = BUILDER
+                .comment("Require no CanPlaceOn tag")
+                .define("requireNoCanPlaceOn", true);
+
+        REQUIRE_NO_OTHER_TAGS = BUILDER
+                .comment(
+                        "Require no other custom tags not listed above",
+                        "If true, any tag not in the list above will cause rejection"
+                )
+                .define("requireNoOtherTags", true);
+
+        BUILDER.pop();
+
+        SPEC = BUILDER.build();
     }
+
+    public static boolean enableMod;
+    public static int minAxeDurability;
+    public static boolean requireNoEnchantments;
+    public static boolean requireNoCustomName;
+    public static boolean requireNoLore;
+    public static boolean requireNoUnbreakable;
+    public static boolean requireNoCanDestroy;
+    public static boolean requireNoCanPlaceOn;
+    public static boolean requireNoOtherTags;
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
-        logDirtBlock = LOG_DIRT_BLOCK.get();
-        magicNumber = MAGIC_NUMBER.get();
-        magicNumberIntroduction = MAGIC_NUMBER_INTRODUCTION.get();
-
-        // convert the list of strings into a set of items
-        items = ITEM_STRINGS.get().stream().map(itemName -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemName))).collect(Collectors.toSet());
-
-        requireCleanAxe = REQUIRE_CLEAN_AXE.get();
+        enableMod          = ENABLE_MOD.get();
+        minAxeDurability   = MIN_AXE_DURABILITY.get();
+        requireNoEnchantments = REQUIRE_NO_ENCHANTMENTS.get();
+        requireNoCustomName   = REQUIRE_NO_CUSTOM_NAME.get();
+        requireNoLore         = REQUIRE_NO_LORE.get();
+        requireNoUnbreakable  = REQUIRE_NO_UNBREAKABLE.get();
+        requireNoCanDestroy   = REQUIRE_NO_CAN_DESTROY.get();
+        requireNoCanPlaceOn   = REQUIRE_NO_CAN_PLACE_ON.get();
+        requireNoOtherTags    = REQUIRE_NO_OTHER_TAGS.get();
     }
 }

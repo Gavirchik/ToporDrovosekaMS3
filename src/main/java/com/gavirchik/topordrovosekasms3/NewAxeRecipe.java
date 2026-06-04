@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -16,12 +17,16 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class NewAxeRecipe {
 
@@ -31,9 +36,10 @@ public class NewAxeRecipe {
     //  [6]S      [7]M  [8]пусто
     //
     // N=Netherite Block, U=Enchanted Book (Unbreaking III),
-    // A=Golden Axe (clean), S=Nether Star, M=Enchanted Book (Mending I)
+    // A=Golden Axe, S=Nether Star, M=Enchanted Book (Mending I)
 
     public static boolean matches(DispenserBlockEntity blockEntity, ServerLevel level) {
+        if (!Config.enableMod) return false;
         if (blockEntity.getContainerSize() < 9) return false;
 
         HolderLookup.RegistryLookup<Enchantment> enchantLookup =
@@ -69,7 +75,6 @@ public class NewAxeRecipe {
 
     private static ItemStack createWoodcutterAxe() {
         ItemStack axe = new ItemStack(Items.GOLDEN_AXE);
-
         axe.set(DataComponents.CUSTOM_NAME,
             Component.literal("Топор Дровосека")
                 .withStyle(Style.EMPTY
@@ -79,16 +84,49 @@ public class NewAxeRecipe {
                 )
         );
         axe.set(DataComponents.UNBREAKABLE, new Unbreakable(true));
-
         return axe;
     }
 
     private static boolean isGoldenAxe(ItemStack stack) {
         if (!stack.is(Items.GOLDEN_AXE)) return false;
-        if (Config.requireCleanAxe) {
-            return stack.getComponentsPatch().equals(DataComponentPatch.EMPTY);
+
+        // Durability: remaining = maxDamage - damage; must be >= minAxeDurability
+        int remaining = stack.getMaxDamage() - stack.getDamageValue();
+        if (remaining < Config.minAxeDurability) return false;
+
+        DataComponentPatch patch = stack.getComponentsPatch();
+
+        if (Config.requireNoEnchantments  && isComponentSet(patch, DataComponents.ENCHANTMENTS))  return false;
+        if (Config.requireNoCustomName    && isComponentSet(patch, DataComponents.CUSTOM_NAME))    return false;
+        if (Config.requireNoLore          && isComponentSet(patch, DataComponents.LORE))           return false;
+        if (Config.requireNoUnbreakable   && isComponentSet(patch, DataComponents.UNBREAKABLE))    return false;
+        if (Config.requireNoCanDestroy    && isComponentSet(patch, DataComponents.CAN_BREAK))      return false;
+        if (Config.requireNoCanPlaceOn    && isComponentSet(patch, DataComponents.CAN_PLACE_ON))   return false;
+
+        if (Config.requireNoOtherTags) {
+            // Build the set of component types that are explicitly permitted in the patch
+            Set<DataComponentType<?>> allowed = new HashSet<>();
+            allowed.add(DataComponents.DAMAGE); // durability is always OK
+            if (!Config.requireNoEnchantments) allowed.add(DataComponents.ENCHANTMENTS);
+            if (!Config.requireNoCustomName)   allowed.add(DataComponents.CUSTOM_NAME);
+            if (!Config.requireNoLore)         allowed.add(DataComponents.LORE);
+            if (!Config.requireNoUnbreakable)  allowed.add(DataComponents.UNBREAKABLE);
+            if (!Config.requireNoCanDestroy)   allowed.add(DataComponents.CAN_BREAK);
+            if (!Config.requireNoCanPlaceOn)   allowed.add(DataComponents.CAN_PLACE_ON);
+
+            for (var entry : patch.entrySet()) {
+                if (entry.getValue().isPresent() && !allowed.contains(entry.getKey())) {
+                    return false;
+                }
+            }
         }
+
         return true;
+    }
+
+    private static boolean isComponentSet(DataComponentPatch patch, DataComponentType<?> type) {
+        Optional<?> opt = patch.get(type);
+        return opt != null && opt.isPresent();
     }
 
     // Checks that the book has exactly one stored enchantment at the required level

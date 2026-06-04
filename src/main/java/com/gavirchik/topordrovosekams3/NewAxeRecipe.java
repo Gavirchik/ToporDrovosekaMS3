@@ -1,4 +1,4 @@
-package com.gavirchik.topordrovosekasms3;
+package com.gavirchik.topordrovosekams3;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

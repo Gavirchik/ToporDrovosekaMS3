@@ -1,6 +1,6 @@
-package com.gavirchik.topordrovosekasms3.mixin;
+package com.gavirchik.topordrovosekams3.mixin;
 
-import com.gavirchik.topordrovosekasms3.NewAxeRecipe;
+import com.gavirchik.topordrovosekams3.NewAxeRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.DispenserBlock;
